@@ -54,54 +54,8 @@ check_latest_version(){
 	fi
 }
 doupx(){
-	Archt="$(opkg info kernel | grep Architecture | awk -F "[ _]" '{print($2)}')"
-	case $Archt in
-	"i386")
-	Arch="i386"
-	;;
-	"i686")
-	Arch="i386"
-	echo -e "i686 use $Arch may have bug" 
-	;;
-	"x86")
-	Arch="amd64"
-	;;
-	"mipsel")
-	Arch="mipsel"
-	;;
-	"mips64el")
-	Arch="mips64el"
-	Arch="mipsel"
-	echo -e "mips64el use $Arch may have bug" 
-	;;
-	"mips")
-	Arch="mips"
-	;;
-	"mips64")
-	Arch="mips64"
-	Arch="mips"
-	echo -e "mips64 use $Arch may have bug" 
-	;;
-	"arm")
-	Arch="arm"
-	;;
-	"armeb")
-	Arch="armeb"
-	;;
-	"aarch64")
+	# 直接硬编码架构为 arm64（aarch64）
 	Arch="arm64"
-	;;
-	"powerpc")
-	Arch="powerpc"
-	;;
-	"powerpc64")
-	Arch="powerpc64"
-	;;
-	*)
-	echo -e "error not support $Archt if you can use offical release please issue a bug" 
-	EXIT 1
-	;;
-	esac
 	upx_latest_ver="$($downloader - https://api.github.com/repos/upx/upx/releases/latest 2>/dev/null|grep -E 'tag_name' |grep -E '[0-9.]+' -o 2>/dev/null)"
 	$downloader /tmp/upx-${upx_latest_ver}-${Arch}_linux.tar.xz "https://github.com/upx/upx/releases/download/v${upx_latest_ver}/upx-${upx_latest_ver}-${Arch}_linux.tar.xz" 2>&1
 	#tar xvJf
@@ -118,55 +72,10 @@ doupdate_core(){
 	echo -e "Updating core..." 
 	mkdir -p "/tmp/AdGuardHomeupdate"
 	rm -rf /tmp/AdGuardHomeupdate/* >/dev/null 2>&1
-	Archt="$(opkg info kernel | grep Architecture | awk -F "[ _]" '{print($2)}')"
-	case $Archt in
-	"i386")
-	Arch="386"
-	;;
-	"i686")
-	Arch="386"
-	;;
-	"x86")
-	Arch="amd64"
-	;;
-	"mipsel")
-	Arch="mipsle"
-	;;
-	"mips64el")
-	Arch="mips64le"
-	Arch="mipsle"
-	echo -e "mips64el use $Arch may have bug" 
-	;;
-	"mips")
-	Arch="mips"
-	;;
-	"mips64")
-	Arch="mips64"
-	Arch="mips"
-	echo -e "mips64 use $Arch may have bug" 
-	;;
-	"arm")
-	Arch="arm"
-	;;
-	"aarch64")
-	Arch="arm64"
-	;;
-	"powerpc")
-	Arch="ppc"
-	echo -e "error not support $Archt" 
-	EXIT 1
-	;;
-	"powerpc64")
-	Arch="ppc64"
-	echo -e "error not support $Archt" 
-	EXIT 1
-	;;
-	*)
-	echo -e "error not support $Archt if you can use offical release please issue a bug" 
-	EXIT 1
-	;;
-	esac
+
 	echo -e "start download" 
+	# 直接硬编码架构为 arm64（aarch64）
+	Arch="arm64"
 	grep -v "^#" /usr/share/AdGuardHome/links.txt >/tmp/run/AdHlinks.txt
 	while read link
 	do
